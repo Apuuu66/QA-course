@@ -1,5 +1,6 @@
 package com.guier.solr;
 
+import com.guier.pojo.Product;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -164,7 +165,6 @@ public class SolrManager {
         System.out.println("totalCount:" + totalCount);
         for (SolrDocument document : solrDocumentList) {
             //System.out.println(document);
-
             //获取高亮文档
             Map<String, List<String>> fieldMap = hightLightMap.get(document.get("id"));
             //高亮的内容是搜索的域这里是默认域product_name,且获得的List只有product_name的值
@@ -174,5 +174,32 @@ public class SolrManager {
         }
     }
 
+    @Test
+    public void f178() throws IOException, SolrServerException {
+        SolrClient solrClient = getSolrClient();
+        //关键词 过滤条件  排序 分页 开始行 每页数 高亮 默认域 只查询指定域
+        SolrQuery solrQuery = new SolrQuery();
+        //设置默认域
+        solrQuery.set("df", "product_name");
+        solrQuery.set("q", "衣服");
 
+
+        solrQuery.setHighlight(true);
+        solrQuery.setHighlightSimplePre("<color style='color:red'>");
+        solrQuery.setHighlightSimplePost("</color>");
+
+
+        QueryResponse res = solrClient.query(solrQuery);
+        SolrDocumentList results = res.getResults();
+        System.out.println(results);
+
+        Map<String, Map<String, List<String>>> highlighting = res.getHighlighting();
+        System.out.println(highlighting);
+        List<Product> resBeans = res.getBeans(Product.class);
+        System.out.println(resBeans);
+    }
+
+    public <T> List<T> getBeans(QueryResponse res, Class<T> type) {
+        return null;
+    }
 }

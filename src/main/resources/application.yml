@@ -1,0 +1,17 @@
+#开启高亮显示
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+
+logging:
+#  file: D:/log/test.log
+  level:
+    org:
+      springframework:
+        web:
+          servlet: ERROR
+    root: INFO
+  pattern:
+    console: %boldMagenta(%d{yyyy-MM-dd HH:mm:ss})  [%p]  %highlight(%C:%L)  : %m %n
+#    file: %boldMagenta(%d{yyyy-MM-dd HH:mm:ss})  [%p]  %highlight(%C:%L)  : %m %n
